@@ -13,13 +13,44 @@ interface IWriteData {
     title: string // 爬取到的商品标题
 }
 
+async function logIntoTaobao(browser: puppeteer.Browser) {
+    const page = await browser.newPage();
+    let url = 'https://login.taobao.com/member/login.jhtml';
+    await page.goto(url);
+    const btnChange2Static = await page.$('#J_Quick2Static');
+    await btnChange2Static.click();
+    const inputUserName = await page.$('#TPL_username_1');
+    const inputPassword = await page.$('#TPL_password_1');
+    const submit = await page.$('#J_SubmitStatic');
+    log(inputUserName);
+    log(inputPassword);
+    await inputUserName.type('kawaii_roy');
+    await inputPassword.type('11050622jyqdt');
+    const slide = await page.$('.nc_iconfont.btn_slide');
+    // await page.mouse.move(slide.x, 0);
+    await page.mouse.down();
+    await slide.click({ delay: 1500 });
+    // submit.click();
+}
+
 // 进入代码的主逻辑
 async function main() {
     // 首先通过Puppeteer启动一个浏览器环境
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        // 设置超时时间
+        timeout: 15000,
+        // 如果是访问https页面 此属性会忽略https错误
+        ignoreHTTPSErrors: true,
+        // 打开开发者工具, 当此值为true时, headless总为false
+        devtools: false,
+        // 关闭headless模式, 不会打开浏览器
+        headless: false
+    });
     log(chalk.green('服务正常启动'));
     // 使用 try catch 捕获异步中的错误进行统一的错误处理
     try {
+        await logIntoTaobao(browser);
+        return;
         // 打开一个新的页面
         const page = await browser.newPage();
         // 监听页面内部的console消息
@@ -32,7 +63,8 @@ async function main() {
         });
 
         // 打开我们刚刚看见的淘宝页面
-        await page.goto('https://www.douban.com/group/shanghaizufang/');
+        let url = 'https://s.taobao.com/search?q=gtx2080ti&imgfile=&js=1&stats_click=search_radio_all%3A1&initiative_id=staobaoz_20181109&ie=utf8';
+        await page.goto(url);
         log(chalk.yellow('页面初次加载完毕'));
 
         // 使用一个 for await 循环，不能一个时间打开多个网络请求，这样容易因为内存过大而挂掉
@@ -111,8 +143,10 @@ async function main() {
             });
             // 得到数据以后写入到mongodb
             // const result = await mongo.insertMany('GTX1080', list);
+            const result = list;
 
             log(chalk.yellow('写入数据库完毕'));
+            log(result);
         }
 
     } catch (error) {
@@ -122,6 +156,8 @@ async function main() {
         await browser.close();
     } finally {
         // 最后要退出进程
-        process.exit(0);
+        // process.exit(0);
     }
 }
+
+main();
