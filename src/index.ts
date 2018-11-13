@@ -33,6 +33,16 @@ async function logIntoTaobao(browser: puppeteer.Browser) {
     // submit.click();
 }
 
+async function getDoubanRentInfo(browser: puppeteer.Browser) {
+    const page = await browser.newPage();
+    let url = 'https://www.douban.com/group/shanghaizufang/';
+    await page.goto(url);
+    const table = await page.$('.olt');
+    const data = await page.evaluate(() => {
+        let table1 = 
+    })
+}
+
 // 进入代码的主逻辑
 async function main() {
     // 首先通过Puppeteer启动一个浏览器环境
@@ -49,7 +59,7 @@ async function main() {
     log(chalk.green('服务正常启动'));
     // 使用 try catch 捕获异步中的错误进行统一的错误处理
     try {
-        await logIntoTaobao(browser);
+        // await logIntoTaobao(browser);
         return;
         // 打开一个新的页面
         const page = await browser.newPage();
