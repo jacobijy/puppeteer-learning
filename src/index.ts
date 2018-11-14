@@ -37,10 +37,30 @@ async function getDoubanRentInfo(browser: puppeteer.Browser) {
     const page = await browser.newPage();
     let url = 'https://www.douban.com/group/shanghaizufang/';
     await page.goto(url);
-    const table = await page.$('.olt');
+
     const data = await page.evaluate(() => {
-        let table1 = 
-    })
+        const result = [];
+        let table = document.querySelectorAll('.olt')[0];
+        let list = table.children[0].children;
+        for (const tr of list) {
+            if (tr.className === 'th') {
+                continue;
+            }
+            let tdlist = tr.querySelectorAll('td');
+            let tdUrl = tdlist[0];
+            let uri = tdUrl.querySelector('a').baseURI;
+            let title = tdUrl.querySelector('a').innerText;
+            let author = tdlist[1];
+            let authorUrl = author.querySelector('a').baseURI;
+            let authorName = author.querySelector('a').innerText;
+            let count = tdlist[2].innerText;
+            let time = tdlist[3].innerText;
+            result.push({ url: uri, title, author: authorName, authorUrl, count, time });
+        }
+        return result;
+        // table.children
+    });
+    log(data);
 }
 
 // 进入代码的主逻辑
@@ -54,12 +74,14 @@ async function main() {
         // 打开开发者工具, 当此值为true时, headless总为false
         devtools: false,
         // 关闭headless模式, 不会打开浏览器
-        headless: false
+        headless: false,
+        args: ['--no-sandbox']
     });
     log(chalk.green('服务正常启动'));
     // 使用 try catch 捕获异步中的错误进行统一的错误处理
     try {
         // await logIntoTaobao(browser);
+        await getDoubanRentInfo(browser);
         return;
         // 打开一个新的页面
         const page = await browser.newPage();
