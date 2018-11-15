@@ -4,6 +4,7 @@ import { formatProgress } from './utils/progress';
 
 const log = console.log;
 const TOTAL_PAGE = 50;
+const platform = process.platform;
 
 // 定义要爬去的数据结构
 interface IWriteData {
@@ -11,6 +12,15 @@ interface IWriteData {
     picture: string // 爬取到的图片链接
     price: number // 价格，number类型，需要从爬取下来的数据进行转型
     title: string // 爬取到的商品标题
+}
+
+interface IRentData {
+    url: string;
+    title: string;
+    author: string;
+    authorUrl: string;
+    count: number;
+    time: string;
 }
 
 async function logIntoTaobao(browser: puppeteer.Browser) {
@@ -39,7 +49,7 @@ async function getDoubanRentInfo(browser: puppeteer.Browser) {
     await page.goto(url);
 
     const data = await page.evaluate(() => {
-        const result = [];
+        const result: IRentData[] = [];
         let table = document.querySelectorAll('.olt')[0];
         let list = table.children[0].children;
         for (const tr of list) {
@@ -53,7 +63,7 @@ async function getDoubanRentInfo(browser: puppeteer.Browser) {
             let author = tdlist[1];
             let authorUrl = author.querySelector('a').baseURI;
             let authorName = author.querySelector('a').innerText;
-            let count = tdlist[2].innerText;
+            let count = parseInt(tdlist[2].innerText, 10);
             let time = tdlist[3].innerText;
             result.push({ url: uri, title, author: authorName, authorUrl, count, time });
         }
@@ -74,14 +84,15 @@ async function main() {
         // 打开开发者工具, 当此值为true时, headless总为false
         devtools: false,
         // 关闭headless模式, 不会打开浏览器
-        headless: false,
-        args: ['--no-sandbox']
+        headless: platform === 'linux',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     log(chalk.green('服务正常启动'));
     // 使用 try catch 捕获异步中的错误进行统一的错误处理
     try {
         // await logIntoTaobao(browser);
         await getDoubanRentInfo(browser);
+        await browser.close();
         return;
         // 打开一个新的页面
         const page = await browser.newPage();
