@@ -8,16 +8,20 @@
   },
   "author": "",
   "license": "ISC",
+  "repository": "",
   "dependencies": {
     "chalk": "^2.4.1",
     "ioredis": "^4.2.0",
     "lodash": "^4.17.11",
     "log4js": "^3.0.6",
-    "puppeteer": "^1.9.0"
+    "mysql2": "^1.6.4",
+    "puppeteer": "^1.9.0",
+    "sequelize": "^4.41.2"
   },
   "devDependencies": {
     "@types/ioredis": "^4.0.4",
     "@types/lodash": "^4.14.118",
-    "@types/puppeteer": "^1.9.0"
+    "@types/puppeteer": "^1.9.0",
+    "@types/sequelize": "^4.27.30"
   }
 }
