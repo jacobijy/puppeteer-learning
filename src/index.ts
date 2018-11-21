@@ -15,6 +15,7 @@ interface IWriteData {
 }
 
 interface IRentData {
+    topicId: number;
     url: string;
     title: string;
     author: string;
@@ -58,14 +59,16 @@ async function getDoubanRentInfo(browser: puppeteer.Browser) {
             }
             let tdlist = tr.querySelectorAll('td');
             let tdUrl = tdlist[0];
-            let uri = tdUrl.querySelector('a').baseURI;
+            let uri = tdUrl.querySelector('a').href;
+            let reg = /https:\/\/www.douban.com\/group\/topic\/([0-9]+)\//;
+            let topicId = parseInt(uri.match(reg)[1], 10);
             let title = tdUrl.querySelector('a').innerText;
             let author = tdlist[1];
-            let authorUrl = author.querySelector('a').baseURI;
+            let authorUrl = author.querySelector('a').href;
             let authorName = author.querySelector('a').innerText;
             let count = parseInt(tdlist[2].innerText, 10);
             let time = tdlist[3].innerText;
-            result.push({ url: uri, title, author: authorName, authorUrl, count, time });
+            result.push({ topicId , url: uri, title, author: authorName, authorUrl, count, time });
         }
         return result;
         // table.children
