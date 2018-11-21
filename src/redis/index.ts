@@ -11,7 +11,7 @@ const client  = new Redis({
 // client.Promise
 client.on('error', (err: Error) => {
     if (err) {
-        logger.error('connect to redis error, check your redis config', err);
+        logger().error('connect to redis error, check your redis config', err);
         // logger('default').error('connect to redis error, check your redis config', err);
         process.exit(1);
     }

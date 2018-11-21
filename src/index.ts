@@ -84,7 +84,7 @@ async function main() {
     // 首先通过Puppeteer启动一个浏览器环境
     const browser = await puppeteer.launch({
         // 设置超时时间
-        timeout: 0,
+        timeout: 300000,
         // 如果是访问https页面 此属性会忽略https错误
         ignoreHTTPSErrors: true,
         // 打开开发者工具, 当此值为true时, headless总为false

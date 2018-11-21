@@ -46,16 +46,11 @@ export default async function getHeroDamageInfo(browser: puppeteer.Browser) {
     //         Object.assign(azeritePowerWeights[professionex], { [className]: result });
     //     }
     // };
-    // for await (let value of array) {
-    //     readPage(value);
-    // }
-    for (let index = 0; index < array.length; index++) {
-        // await readPage(array[index]);
-        const pros = array[index];
-        let className = pros[1];
-        let professionex = pros[0];
+    for await (let value of array) {
+        let className = value[1];
+        let professionex = value[0];
         let url = `https://www.herodamage.com/${professionex}/azerite-levels/${GameTier}-${className}`;
-        await page.goto(url);
+        await page.goto(url, { timeout: 0 });
         let result = await page.evaluate(() => {
             let texaArea: HTMLTextAreaElement = document.querySelector('#azerite-power-weights');
             return texaArea.value;
@@ -67,19 +62,24 @@ export default async function getHeroDamageInfo(browser: puppeteer.Browser) {
             Object.assign(azeritePowerWeights[professionex], { [className]: result });
         }
     }
-    // Object.keys(classesWithAzerites).forEach(key => {
-    //     let classes = classesWithAzerites[key];
-    //     classes.forEach(async className => {
-    //         let url = `https://www.herodamage.com/${key}/azerite-levels/${GameTier}-${className}`;
-    //         await page.goto(url);
-    //         let result = await page.evaluate(() => {
-    //             let texaArea: HTMLTextAreaElement = document.querySelector('#azerite-power-weights');
-    //             return texaArea.value;
-    //         });
-    //         azeritePowerWeights[key][className] = result;
+    // for (let index = 0; index < array.length; index++) {
+    //     // await readPage(array[index]);
+    //     const pros = array[index];
+    //     let className = pros[1];
+    //     let professionex = pros[0];
+    //     let url = `https://www.herodamage.com/${professionex}/azerite-levels/${GameTier}-${className}`;
+    //     await page.goto(url);
+    //     let result = await page.evaluate(() => {
+    //         let texaArea: HTMLTextAreaElement = document.querySelector('#azerite-power-weights');
+    //         return texaArea.value;
     //     });
-    // });
-    // await page.goto(url);
+    //     if (!azeritePowerWeights[professionex]) {
+    //         Object.assign(azeritePowerWeights, { [professionex]: { [className]: result } });
+    //     }
+    //     else {
+    //         Object.assign(azeritePowerWeights[professionex], { [className]: result });
+    //     }
+    // }
 }
 
 export { azeritePowerWeights };

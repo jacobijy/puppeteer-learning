@@ -8,6 +8,14 @@
 		"rule-console": {
 			"type": "console"
 		},
+		"rule-net": {
+			"type": "dateFile",
+			"filename": "logs/net-",
+			"pattern": "yyyy-MM-dd.log",
+			"maxLogSize": 1000000,
+			"numBackups": 3,
+			"alwaysIncludePattern": true
+		},
 		"rule-file": {
 			"type": "dateFile",
 			"filename": "logs/server-",
@@ -40,6 +48,12 @@
 			"appenders": [
 				"rule-console",
 				"access"
+			],
+			"level": "info"
+		},
+		"socket": {
+			"appenders": [
+				"rule-net"
 			],
 			"level": "info"
 		}
