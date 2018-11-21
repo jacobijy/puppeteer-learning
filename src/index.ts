@@ -4,7 +4,7 @@ import { formatProgress } from './utils/progress';
 import getHeroDamageInfo, { azeritePowerWeights } from './websites/herodamage';
 import { promises } from 'fs';
 
-process.setMaxListeners(0);
+process.setMaxListeners(50);
 const log = console.log;
 const TOTAL_PAGE = 50;
 const platform = process.platform;
@@ -84,7 +84,7 @@ async function main() {
     // 首先通过Puppeteer启动一个浏览器环境
     const browser = await puppeteer.launch({
         // 设置超时时间
-        timeout: 15000,
+        timeout: 0,
         // 如果是访问https页面 此属性会忽略https错误
         ignoreHTTPSErrors: true,
         // 打开开发者工具, 当此值为true时, headless总为false
@@ -98,10 +98,15 @@ async function main() {
 
     // await logIntoTaobao(browser);
     // await getDoubanRentInfo(browser);
-    await getHeroDamageInfo(browser);
-    log(azeritePowerWeights);
-    await promises.writeFile('./herodamage.json', JSON.stringify(azeritePowerWeights, null, '\t'));
-    await browser.close();
+    try {
+        await getHeroDamageInfo(browser);
+        log(azeritePowerWeights);
+        await promises.writeFile('./herodamage.json', JSON.stringify(azeritePowerWeights, null, '\t'));
+        await browser.close();
+    } catch (error) {
+        log(error);
+        browser.close();
+    }
     return;
     // 打开一个新的页面
     const page = await browser.newPage();
