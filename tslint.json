@@ -40,7 +40,8 @@
 		"ordered-imports": false,
 		"object-literal-sort-keys": false,
 		"no-bitwise": false,
-		"prefer-const": false
+		"prefer-const": false,
+		"no-console": false
 	},
 	"rulesDirectory": []
 }

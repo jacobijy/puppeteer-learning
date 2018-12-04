@@ -3,7 +3,9 @@ import chalk from 'chalk';
 import { formatProgress } from './utils/progress';
 import getHeroDamageInfo, { azeritePowerWeights } from './websites/herodamage';
 import { promises } from 'fs';
+import getExhibitors from './websites/electronica';
 
+// String.prototype.
 process.setMaxListeners(50);
 const log = console.log;
 const TOTAL_PAGE = 50;
@@ -98,15 +100,16 @@ async function main() {
 
     // await logIntoTaobao(browser);
     // await getDoubanRentInfo(browser);
-    try {
-        await getHeroDamageInfo(browser);
-        log(azeritePowerWeights);
-        await promises.writeFile('./herodamage.json', JSON.stringify(azeritePowerWeights, null, '\t'));
-        await browser.close();
-    } catch (error) {
-        log(error);
-        browser.close();
-    }
+    await getExhibitors(browser);
+    // try {
+    //     await getHeroDamageInfo(browser);
+    //     log(azeritePowerWeights);
+    //     await promises.writeFile('./herodamage.json', JSON.stringify(azeritePowerWeights, null, '\t'));
+    //     await browser.close();
+    // } catch (error) {
+    //     log(error);
+    //     browser.close();
+    // }
     return;
     // 打开一个新的页面
     const page = await browser.newPage();

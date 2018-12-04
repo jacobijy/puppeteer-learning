@@ -27,8 +27,7 @@ export default async function getHeroDamageInfo(browser: puppeteer.Browser) {
     const page = await browser.newPage();
     const array = Object.keys(classesWithAzerites).reduce((prev: string[][], value, index) => {
         let profession = classesWithAzerites[value];
-        prev = prev.concat(profession.map(pro => [value, pro]));
-        return prev;
+        return prev.concat(profession.map(pro => [value, pro]));
     }, []);
     // const readPage = async (value: string[])=> {
     //     let className = value[1];
@@ -50,16 +49,21 @@ export default async function getHeroDamageInfo(browser: puppeteer.Browser) {
         let className = value[1];
         let professionex = value[0];
         let url = `https://www.herodamage.com/${professionex}/azerite-levels/${GameTier}-${className}`;
-        await page.goto(url, { timeout: 0 });
-        let result = await page.evaluate(() => {
-            let texaArea: HTMLTextAreaElement = document.querySelector('#azerite-power-weights');
-            return texaArea.value;
-        });
-        if (!azeritePowerWeights[professionex]) {
-            Object.assign(azeritePowerWeights, { [professionex]: { [className]: result } });
-        }
-        else {
-            Object.assign(azeritePowerWeights[professionex], { [className]: result });
+        try {
+            await page.goto(url, { timeout: 0 });
+            let result = await page.evaluate(() => {
+                let texaArea: HTMLTextAreaElement = document.querySelector('#azerite-power-weights');
+                return texaArea.value;
+            });
+            if (!azeritePowerWeights[professionex]) {
+                Object.assign(azeritePowerWeights, { [professionex]: { [className]: result } });
+            }
+            else {
+                Object.assign(azeritePowerWeights[professionex], { [className]: result });
+            }
+        } catch (error) {
+            console.log(error);
+            continue;
         }
     }
     // for (let index = 0; index < array.length; index++) {

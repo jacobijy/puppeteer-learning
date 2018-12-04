@@ -10,7 +10,7 @@
             "es2017",
             "es2018"
         ],
-        "target": "es6",
+        "target": "es2017",
         "experimentalDecorators": true,
         "skipLibCheck": true,
         "sourceMap": true

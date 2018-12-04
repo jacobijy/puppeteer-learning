@@ -24,6 +24,7 @@
     "@types/ioredis": "^4.0.4",
     "@types/lodash": "^4.14.118",
     "@types/puppeteer": "^1.9.0",
-    "@types/sequelize": "^4.27.30"
+    "@types/sequelize": "^4.27.30",
+    "performance-now": "^2.1.0"
   }
 }
