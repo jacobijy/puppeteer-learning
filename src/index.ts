@@ -101,6 +101,7 @@ async function main() {
     // await logIntoTaobao(browser);
     // await getDoubanRentInfo(browser);
     await getExhibitors(browser);
+    await browser.close();
     // try {
     //     await getHeroDamageInfo(browser);
     //     log(azeritePowerWeights);
