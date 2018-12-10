@@ -2,6 +2,7 @@ import * as puppeteer from 'puppeteer';
 import * as fs from 'fs';
 
 let url = 'https://exhibitors.electronica.de/onlinecatalog/2018/Exhibitors';
+let newUrl = new URL('https://exhibitors.electronica.de/onlinecatalog/2018/Exhibitors');
 
 export default async function getExhibitors(browser: puppeteer.Browser) {
     console.time('begin');
@@ -12,8 +13,9 @@ export default async function getExhibitors(browser: puppeteer.Browser) {
     let tipPerPage = await page.$$('.pagRowsSubmit');
     await tipPerPage[2].click();
     await page.waitForNavigation({ timeout: 0 });
+    // URL
     let maxPage = await page.evaluate(() => {
-        let maxInput = (document.querySelector('.paging_textSubmit.SRFieldSubmiter') as HTMLInputElement).value;
+        let maxInput = document.querySelector<HTMLInputElement>('.paging_textSubmit.SRFieldSubmiter').value;
         return parseInt(maxInput, 10);
     });
     let companyInfo = {};
@@ -34,21 +36,20 @@ export default async function getExhibitors(browser: puppeteer.Browser) {
     }
     await fs.promises.writeFile('./electronica.json', JSON.stringify(companyInfo, null, '\t'));
     console.timeEnd('begin');
-    console.log(companyInfo);
     async function getData() {
         try {
             let result = await page.evaluate(() => {
                 const info = {};
                 let selector = '.jl_lsectionsub.jl_lgroupsub.jl_lentriedivcolor';
-                let divs: NodeListOf<HTMLDivElement> = document.querySelectorAll(selector);
+                let divs = document.querySelectorAll<HTMLDivElement>(selector);
                 for (const div of divs) {
-                    let divName: HTMLDivElement = div.querySelector('.jl_lexname');
+                    let divName = div.querySelector<HTMLDivElement>('.jl_lexname');
                     let divAddr = div.querySelector('.jl_lexadr').children[0];
                     let divDesc = div.querySelector('.jl_lspcTextDiv');
                     let companyAddr = divAddr ? divAddr.textContent : '';
                     let companyDesc = divDesc ? divDesc.textContent : '';
                     let companyName = divName ? divName.textContent : '';
-                    let compurl = (divName.children[0] as HTMLAnchorElement).href;
+                    let compurl = divName.querySelector('a').href;
                     Object.assign(info, {
                         [companyName]: {
                             url: compurl,
