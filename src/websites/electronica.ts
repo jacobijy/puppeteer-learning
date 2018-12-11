@@ -34,6 +34,15 @@ export default async function getExhibitors(browser: puppeteer.Browser) {
             console.log('button error', error);
         }
     }
+    let newPage = await browser.newPage();
+    for (const key in companyInfo) {
+        if (companyInfo.hasOwnProperty(key)) {
+            const pageInfo = companyInfo[key];
+            await newPage.goto(pageInfo.url, { timeout: 0 });
+            let detail = await getCompanyDetail();
+            Object.assign(pageInfo, detail);
+        }
+    }
     await fs.promises.writeFile('./electronica.json', JSON.stringify(companyInfo, null, '\t'));
     console.timeEnd('begin');
     async function getData() {
@@ -61,6 +70,32 @@ export default async function getExhibitors(browser: puppeteer.Browser) {
                 return info;
             });
             return result;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function getCompanyDetail() {
+        try {
+            let detail = newPage.evaluate(() => {
+                const info = {};
+                const applications = [];
+                let applicationDivs = document.querySelectorAll<HTMLDivElement>('.jl_dtdestarea');
+                for (const app of applicationDivs) {
+                    applications.push(app.textContent);
+                }
+                return info;
+            });
+            let tipsHover = await newPage.$$('.jl_anwarea>.jl_anw_1_ges_akt.showToolTip');
+            const applicationsTypes = [];
+            for (const tip of tipsHover) {
+                await tip.hover();
+                applicationsTypes.push(await newPage.evaluate(() => {
+                    let divElement = document.querySelector<HTMLDivElement>('#tiptip_holder');
+                    let tipContent = divElement.querySelector<HTMLDivElement>('#tiptip_content');
+                    return tipContent.textContent;
+                }));
+            }
+            return { detail, applicationsTypes };
         } catch (error) {
             console.log(error);
         }
