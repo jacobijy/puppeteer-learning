@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize';
 
-const sequelize = new Sequelize('database', 'username', 'password', {
+const sequelize = new Sequelize('blhx', 'blhx', '198925', {
     host: 'localhost',
     dialect: 'mysql',
 
@@ -26,5 +26,7 @@ sequelize.sync()
         birthday: new Date(1980, 6, 20)
     }))
     .then(jane => {
-        // console.log(jane.toJSON());
+        console.log(JSON.stringify(jane));
     });
+
+export default sequelize;

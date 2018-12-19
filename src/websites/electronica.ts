@@ -87,13 +87,15 @@ export default async function getExhibitors(browser: puppeteer.Browser) {
             });
             let tipsHover = await newPage.$$('.jl_anwarea>.jl_anw_1_ges_akt.showToolTip');
             const applicationsTypes = [];
-            for (const tip of tipsHover) {
+            for await (const tip of tipsHover) {
                 await tip.hover();
-                applicationsTypes.push(await newPage.evaluate(() => {
+                let result = await newPage.evaluate(() => {
                     let divElement = document.querySelector<HTMLDivElement>('#tiptip_holder');
                     let tipContent = divElement.querySelector<HTMLDivElement>('#tiptip_content');
                     return tipContent.textContent;
-                }));
+                })
+                console.log(result);
+                applicationsTypes.push(result);
             }
             return { detail, applicationsTypes };
         } catch (error) {

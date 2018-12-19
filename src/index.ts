@@ -4,6 +4,7 @@ import { formatProgress } from './utils/progress';
 import getHeroDamageInfo, { azeritePowerWeights } from './websites/herodamage';
 import { promises } from 'fs';
 import getExhibitors from './websites/electronica';
+import './mysql';
 
 // String.prototype.
 process.setMaxListeners(50);

@@ -43,5 +43,5 @@
 		"prefer-const": false,
 		"no-console": false
 	},
-	"rulesDirectory": []
+	"rulesDirectory": [],
 }
