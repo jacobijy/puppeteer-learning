@@ -20,13 +20,14 @@ const User = sequelize.define('user', {
     birthday: Sequelize.DATE
 });
 
-sequelize.sync()
-    .then(() => User.create({
+(async function () {
+    await sequelize.sync();
+    let jane = await User.create({
         username: 'janedoe',
         birthday: new Date(1980, 6, 20)
-    }))
-    .then(jane => {
-        console.log(JSON.stringify(jane));
     });
+    console.log(JSON.stringify(jane));
+})()
+
 
 export default sequelize;

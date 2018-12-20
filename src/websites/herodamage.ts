@@ -29,22 +29,6 @@ export default async function getHeroDamageInfo(browser: puppeteer.Browser) {
         let profession = classesWithAzerites[value];
         return prev.concat(profession.map(pro => [value, pro]));
     }, []);
-    // const readPage = async (value: string[])=> {
-    //     let className = value[1];
-    //     let professionex = value[0];
-    //     let url = `https://www.herodamage.com/${professionex}/azerite-levels/${GameTier}-${className}`;
-    //     await page.goto(url);
-    //     let result = await page.evaluate(() => {
-    //         let texaArea: HTMLTextAreaElement = document.querySelector('#azerite-power-weights');
-    //         return texaArea.value;
-    //     });
-    //     if (!azeritePowerWeights[professionex]) {
-    //         Object.assign(azeritePowerWeights, { [professionex]: { [className]: result } });
-    //     }
-    //     else {
-    //         Object.assign(azeritePowerWeights[professionex], { [className]: result });
-    //     }
-    // };
     for await (let value of array) {
         let className = value[1];
         let professionex = value[0];
@@ -66,24 +50,6 @@ export default async function getHeroDamageInfo(browser: puppeteer.Browser) {
             continue;
         }
     }
-    // for (let index = 0; index < array.length; index++) {
-    //     // await readPage(array[index]);
-    //     const pros = array[index];
-    //     let className = pros[1];
-    //     let professionex = pros[0];
-    //     let url = `https://www.herodamage.com/${professionex}/azerite-levels/${GameTier}-${className}`;
-    //     await page.goto(url);
-    //     let result = await page.evaluate(() => {
-    //         let texaArea: HTMLTextAreaElement = document.querySelector('#azerite-power-weights');
-    //         return texaArea.value;
-    //     });
-    //     if (!azeritePowerWeights[professionex]) {
-    //         Object.assign(azeritePowerWeights, { [professionex]: { [className]: result } });
-    //     }
-    //     else {
-    //         Object.assign(azeritePowerWeights[professionex], { [className]: result });
-    //     }
-    // }
 }
 
 export { azeritePowerWeights };
