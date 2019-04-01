@@ -1,9 +1,17 @@
 import { Browser } from 'puppeteer';
 
-const baseUrl = Object.freeze('http://wiki.joyme.com/blhx/%E9%A6%96%E9%A1%B5');
+const baseUrl = Object.freeze('http://wiki.joyme.com/blhx');
 
-async function getShipInfo(browser: Browser) {
+const pages = {
+    main: '首页',
+}
+
+function getUrl(page: string) {
+    return baseUrl + encodeURI(page);
+}
+
+export default async function getShipInfo(browser: Browser) {
     let page = await browser.newPage();
-    await page.goto(baseUrl, { timeout: 0 });
+    await page.goto(getUrl(pages.main), { timeout: 0 });
     // page.$(a)
 }

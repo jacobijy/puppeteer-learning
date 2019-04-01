@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize';
-import sequelize from '../../mysql';
+import blhxDB from '.';
 /**
   DD = Destroyer = 驱逐舰
   
@@ -37,8 +37,23 @@ export enum WarshipType {
     SubmarineVessel
 }
 
-const Warship = sequelize.define('warship', {
+const Warship = blhxDB.define('warship', {
     shipname: Sequelize.STRING,
+    aliasname: Sequelize.STRING,
     type: Sequelize.NUMERIC,
-    
+    armorType: Sequelize.NUMBER,
+    cannon: Sequelize.NUMBER,
+    torpedo: Sequelize.NUMBER,
+    reload: Sequelize.NUMBER,
+    antiaircraft: Sequelize.NUMBER,
+    oilwear: Sequelize.NUMBER,
+    maneuverability: Sequelize.NUMBER,
+    antisubmarine: Sequelize.NUMBER,
+    stamina: Sequelize.NUMBER,
+    ability1: Sequelize.NUMBER,
+    ability2: Sequelize.NUMBER,
+    ability3: Sequelize.NUMBER
 })
+
+export default Warship;
+// Warship.sync()
