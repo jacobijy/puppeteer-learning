@@ -64,3 +64,4 @@ dist/
 .vscode/
 test/
 images/
+package-lock.json

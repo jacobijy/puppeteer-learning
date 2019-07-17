@@ -1,4 +1,4 @@
-import  {Sequelize, Model} from 'sequelize';
+import { Sequelize, Model } from 'sequelize';
 
 const sequelize = new Sequelize('blhx', 'blhx', '198925', {
     host: 'localhost',

@@ -1,4 +1,4 @@
-import * as DataTypes from 'sequelize';
+import { NUMBER, STRING, ENUM, ARRAY } from 'sequelize';
 import blhxDB from '.';
 /**
   DD = Destroyer = 驱逐舰
@@ -29,32 +29,53 @@ export enum WarshipType {
     CruiserLightTorpedo,
     CruiserArmoured,
     CruiserArmouredVessel,
+    CruiserSuper,
+    BattleCruiser,
     BattleShip,
     BattleshipVessel,
     CarrierVesselLight,
     CarrierVessel,
     Submarine,
-    SubmarineVessel
+    SubmarineVessel,
+    Invalid = -1
+}
+
+const shipTypes = {
+    '驱逐': WarshipType.Destroyer,
+    '轻巡': WarshipType.CruiserLight,
+    '重巡': WarshipType.CruiserArmoured,
+    '战巡': WarshipType.BattleCruiser,
+    '战列': WarshipType.BattleShip,
+    '轻航': WarshipType.CarrierVesselLight,
+    '航母': WarshipType.CarrierVessel,
+    '潜艇': WarshipType.Submarine,
+    '潜母': WarshipType.SubmarineVessel,
+    '超巡': WarshipType.CruiserSuper
+}
+
+export function nameToWarshipType(name: string): WarshipType {
+    return shipTypes[name] || WarshipType.Invalid;
+}
+
+export function shipTypeToName(type: WarshipType): string {
+    return Object.keys(shipTypes).find(name => shipTypes[name] === type);
 }
 
 const Warship = blhxDB.define('warship', {
-    shipNo: DataTypes.NUMBER,
-    shipname: DataTypes.STRING,
-    aliasname: DataTypes.STRING,
-    type: DataTypes.ENUM,
-    armorType: DataTypes.NUMBER,
-    cannon: DataTypes.NUMBER,
-    torpedo: DataTypes.NUMBER,
-    reload: DataTypes.NUMBER,
-    antiaircraft: DataTypes.NUMBER,
-    oilwear: DataTypes.NUMBER,
-    maneuverability: DataTypes.NUMBER,
-    antisubmarine: DataTypes.NUMBER,
-    stamina: DataTypes.NUMBER,
-    ability1: DataTypes.NUMBER,
-    ability2: DataTypes.NUMBER,
-    ability3: DataTypes.NUMBER,
-    ability4: DataTypes.NUMBER
+    shipNo: NUMBER,
+    shipname: STRING,
+    aliasname: STRING,
+    type: ENUM,
+    armorType: NUMBER,
+    cannon: NUMBER,
+    torpedo: NUMBER,
+    reload: NUMBER,
+    antiaircraft: NUMBER,
+    oilwear: NUMBER,
+    maneuverability: NUMBER,
+    antisubmarine: NUMBER,
+    stamina: NUMBER,
+    ability: ARRAY
 })
 
 export default Warship;
