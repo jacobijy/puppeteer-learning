@@ -3,6 +3,6 @@ import sequelize from '../../mysql';
 
 const Warship = sequelize.define('warship', {
     shipname: Sequelize.STRING,
-    type: Sequelize.NUMERIC,
+    type: Sequelize.ENUM,
     
 })

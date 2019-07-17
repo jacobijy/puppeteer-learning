@@ -12,19 +12,26 @@
   "license": "ISC",
   "repository": "",
   "dependencies": {
+    "axios": "^0.19.0",
     "chalk": "^2.4.1",
     "ioredis": "^4.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "log4js": "^3.0.6",
     "mysql2": "^1.6.4",
-    "puppeteer": "^1.9.0",
-    "sequelize": "^4.41.2"
+    "puppeteer": "^1.18.1",
+    "sequelize": "^6.0.0"
   },
   "devDependencies": {
     "@types/ioredis": "^4.0.4",
     "@types/lodash": "^4.14.118",
     "@types/puppeteer": "^1.9.0",
     "@types/sequelize": "^4.27.30",
-    "performance-now": "^2.1.0"
+    "@typescript-eslint/eslint-plugin": "^1.12.0",
+    "@typescript-eslint/parser": "^1.12.0",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
+    "performance-now": "^2.1.0",
+    "typescript": "^3.5.3"
   }
 }

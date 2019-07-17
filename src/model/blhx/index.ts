@@ -1,4 +1,4 @@
-import * as Sequelize from 'sequelize';
+import  {Sequelize} from 'sequelize';
 import './Warships';
 
 const blhxDB = new Sequelize('blhx', 'blhx', '198925', {
@@ -10,10 +10,7 @@ const blhxDB = new Sequelize('blhx', 'blhx', '198925', {
         min: 0,
         acquire: 30000,
         idle: 10000
-    },
-
-    // http://docs.sequelizejs.com/manual/tutorial/querying.html#operators
-    operatorsAliases: false
+    }
 });
 
 blhxDB.sync();

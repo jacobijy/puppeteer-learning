@@ -1,9 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import chalk from 'chalk';
 import { formatProgress } from './utils/progress';
-import getHeroDamageInfo, { azeritePowerWeights } from './websites/herodamage';
-import { promises } from 'fs';
-import getExhibitors from './websites/electronica';
+import { getLoadingImg } from './websites/blhx/getImages'
 import './mysql';
 
 // String.prototype.
@@ -13,14 +11,14 @@ const TOTAL_PAGE = 50;
 const platform = process.platform;
 
 // 定义要爬去的数据结构
-interface IWriteData {
-    link: string // 爬取到的商品详情链接
-    picture: string // 爬取到的图片链接
-    price: number // 价格，number类型，需要从爬取下来的数据进行转型
-    title: string // 爬取到的商品标题
+interface WriteData {
+    link: string; // 爬取到的商品详情链接
+    picture: string; // 爬取到的图片链接
+    price: number; // 价格，number类型，需要从爬取下来的数据进行转型
+    title: string; // 爬取到的商品标题
 }
 
-interface IRentData {
+interface RentData {
     topicId: number;
     url: string;
     title: string;
@@ -38,7 +36,7 @@ async function logIntoTaobao(browser: puppeteer.Browser) {
     await btnChange2Static.click();
     const inputUserName = await page.$('#TPL_username_1');
     const inputPassword = await page.$('#TPL_password_1');
-    const submit = await page.$('#J_SubmitStatic');
+    // const submit = await page.$('#J_SubmitStatic');
     log(inputUserName);
     log(inputPassword);
     await inputUserName.type('kawaii_roy');
@@ -56,7 +54,7 @@ async function getDoubanRentInfo(browser: puppeteer.Browser) {
     await page.goto(url);
 
     const data = await page.evaluate(() => {
-        const result: IRentData[] = [];
+        const result: RentData[] = [];
         let table = document.querySelectorAll('.olt')[0];
         let list = table.children[0].children;
         for (const tr of list) {
@@ -74,7 +72,7 @@ async function getDoubanRentInfo(browser: puppeteer.Browser) {
             let authorName = author.querySelector('a').innerText;
             let count = parseInt(tdlist[2].innerText, 10);
             let time = tdlist[3].innerText;
-            result.push({ topicId , url: uri, title, author: authorName, authorUrl, count, time });
+            result.push({ topicId, url: uri, title, author: authorName, authorUrl, count, time });
         }
         return result;
         // table.children
@@ -97,6 +95,8 @@ async function main() {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     log(chalk.green('服务正常启动'));
+    await getLoadingImg(browser);
+    return;
     // 使用 try catch 捕获异步中的错误进行统一的错误处理
 
     // await logIntoTaobao(browser);
@@ -112,7 +112,6 @@ async function main() {
     //     log(error);
     //     browser.close();
     // }
-    return;
     // 打开一个新的页面
     const page = await browser.newPage();
     // 监听页面内部的console消息
@@ -165,14 +164,14 @@ async function main() {
         const list = await page.evaluate(() => {
 
             // 先声明一个用于存储爬取数据的数组
-            const writeDataList: IWriteData[] = [];
+            const writeDataList: WriteData[] = [];
 
             // 获取到所有的商品元素
             let itemList = document.querySelectorAll('.item.J_MouserOnverReq');
             // 遍历每一个元素，整理需要爬取的数据
             for (let item of itemList) {
                 // 首先声明一个爬取的数据结构
-                let writeData: IWriteData = {
+                let writeData: WriteData = {
                     picture: undefined,
                     link: undefined,
                     title: undefined,
