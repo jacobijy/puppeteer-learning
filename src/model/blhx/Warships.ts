@@ -40,6 +40,36 @@ export enum WarshipType {
     Invalid = -1
 }
 
+export enum Rarity {
+    Normal,
+    Rare,
+    SuperRare,
+    Elite = 2,
+    SuperiorSuperRare,
+    Priority,
+    UltraRare,
+    Decisive
+}
+
+export enum Region {
+    EagleUnion,
+    RoyalNavy,
+    IronBlood,
+    VichyaDominion,
+    IrisLibre,
+    SakuraEmpire,
+    DragonEmpery,
+    NorthernParliament
+}
+
+export enum AchieveType {
+    OnlyBuildNormal,
+    OnlyBuildLimit,
+    OnlySalvage,
+    All,
+    None,
+}
+
 const shipTypes = {
     '驱逐': WarshipType.Destroyer,
     '轻巡': WarshipType.CruiserLight,
@@ -53,6 +83,27 @@ const shipTypes = {
     '超巡': WarshipType.CruiserSuper
 }
 
+const raritys = {
+    '普通': Rarity.Normal,
+    '稀有': Rarity.Rare,
+    '精锐': Rarity.SuperRare,
+    '超稀有': Rarity.SuperiorSuperRare,
+    '': Rarity.UltraRare,
+    '特别计划': Rarity.Priority,
+    '决战方案': Rarity.Decisive
+}
+
+const regions = {
+    '白鹰': Region.EagleUnion,
+    '重樱': Region.SakuraEmpire,
+    '皇家': Region.RoyalNavy,
+    '铁血': Region.IronBlood,
+    '维西教廷': Region.VichyaDominion,
+    '自由鸢尾': Region.IrisLibre,
+    '东煌': Region.DragonEmpery,
+    '北方联合': Region.NorthernParliament
+}
+
 export function nameToWarshipType(name: string): WarshipType {
     return shipTypes[name] || WarshipType.Invalid;
 }
@@ -60,6 +111,23 @@ export function nameToWarshipType(name: string): WarshipType {
 export function shipTypeToName(type: WarshipType): string {
     return Object.keys(shipTypes).find(name => shipTypes[name] === type);
 }
+
+export function nameToRarity(name: string): Rarity {
+    return raritys[name]  || Rarity.Normal;
+}
+
+export function rarityToName(rare: Rarity): string {
+    return Object.keys(raritys).find(name => raritys[name] === rare);
+}
+
+export function nameToRegion(name: string): Region {
+    return regions[name]  || Region.EagleUnion;
+}
+
+export function regionToName(reg: Region): string {
+    return Object.keys(regions).find(name => regions[name] === reg);
+}
+
 
 const Warship = blhxDB.define('warship', {
     shipNo: NUMBER,
@@ -80,3 +148,9 @@ const Warship = blhxDB.define('warship', {
 
 export default Warship;
 // Warship.sync()
+
+
+// 关卡定义
+// 用short表示
+// 0xffff
+// 前两位大关卡， 第三位，活动abcd关，最后一位，小关数
