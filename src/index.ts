@@ -3,12 +3,16 @@ import chalk from 'chalk';
 import { formatProgress } from './utils/progress';
 import { getLoadingImg } from './websites/blhx/getImages'
 import './mysql';
+import getAcitivityInfo from './websites/blhx/getActivityInfos';
+import { getWarshipInfo } from './websites/blhx/getWarshipInfo';
 
 // String.prototype.
 process.setMaxListeners(50);
 const log = console.log;
 const TOTAL_PAGE = 50;
 const platform = process.platform;
+
+let args = process.argv.splice(2);
 
 // 定义要爬去的数据结构
 interface WriteData {
@@ -92,10 +96,25 @@ async function main() {
         devtools: false,
         // 关闭headless模式, 不会打开浏览器
         headless: platform === 'linux',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        defaultViewport: {
+            width: 1200,
+            height: 800
+        }
     });
     log(chalk.green('服务正常启动'));
-    await getLoadingImg(browser);
+    switch(args[0]) {
+        case 'spex':
+            await getAcitivityInfo(browser);
+            break;
+        case 'warships':
+            await getWarshipInfo(browser, '');
+            break;
+        case 'bg':
+            await getLoadingImg(browser);
+            break;
+    }
+    await browser.close();
     return;
     // 使用 try catch 捕获异步中的错误进行统一的错误处理
 

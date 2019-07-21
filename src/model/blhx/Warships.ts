@@ -1,5 +1,5 @@
 import { NUMBER, STRING, ENUM, ARRAY } from 'sequelize';
-import blhxDB from '.';
+// import blhxDB from '.';
 /**
   DD = Destroyer = 驱逐舰
 
@@ -113,7 +113,7 @@ export function shipTypeToName(type: WarshipType): string {
 }
 
 export function nameToRarity(name: string): Rarity {
-    return raritys[name]  || Rarity.Normal;
+    return raritys[name] || Rarity.Normal;
 }
 
 export function rarityToName(rare: Rarity): string {
@@ -121,7 +121,7 @@ export function rarityToName(rare: Rarity): string {
 }
 
 export function nameToRegion(name: string): Region {
-    return regions[name]  || Region.EagleUnion;
+    return regions[name] || Region.EagleUnion;
 }
 
 export function regionToName(reg: Region): string {
@@ -129,28 +129,47 @@ export function regionToName(reg: Region): string {
 }
 
 
-const Warship = blhxDB.define('warship', {
-    shipNo: NUMBER,
-    shipname: STRING,
-    aliasname: STRING,
-    type: ENUM,
-    armorType: NUMBER,
-    cannon: NUMBER,
-    torpedo: NUMBER,
-    reload: NUMBER,
-    antiaircraft: NUMBER,
-    oilwear: NUMBER,
-    maneuverability: NUMBER,
-    antisubmarine: NUMBER,
-    stamina: NUMBER,
-    ability: ARRAY
-})
+// const Warship = blhxDB.define('warship', {
+//     shipNo: NUMBER,
+//     shipname: STRING,
+//     aliasname: STRING,
+//     type: ENUM,
+//     armorType: NUMBER,
+//     cannon: NUMBER,
+//     torpedo: NUMBER,
+//     reload: NUMBER,
+//     antiaircraft: NUMBER,
+//     oilwear: NUMBER,
+//     maneuverability: NUMBER,
+//     antisubmarine: NUMBER,
+//     stamina: NUMBER,
+//     ability: ARRAY
+// })
 
-export default Warship;
+// export default Warship;
 // Warship.sync()
 
 
 // 关卡定义
 // 用short表示
-// 0xffff
+// 个位 小关数 十位 活动abcd关 百位 重置/档案 = 9
+// 千位以上大关
 // 前两位大关卡， 第三位，活动abcd关，最后一位，小关数
+/**
+ * 
+ * @param mainStage 大关
+ * @param level 小关
+ * @param subStage 活动abcd分组
+ * @param remake 复刻
+ */
+export function generateDBStage(mainStage: number, level: number, subStage = 0, remake = 0) {
+    return mainStage * 1000 + level + subStage * 10 + remake * 100;
+}
+
+export function decodeDBStage(stage: number) {
+    let main = Math.floor(stage / 1000);
+    let level = stage % 10;
+    let subStage = Math.floor(stage / 10) % 10;
+    let remake = Math.floor(stage / 100) % 10;
+    return { main, level, subStage, remake };
+}

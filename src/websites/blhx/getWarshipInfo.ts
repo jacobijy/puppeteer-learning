@@ -1,6 +1,6 @@
 import { getUrl } from './commonFunc';
 import { Browser } from 'puppeteer';
-import { WarshipType, nameToWarshipType, Rarity, nameToRarity, Region, nameToRegion } from '../../model/blhx/Warships';
+import { WarshipType, nameToWarshipType, Rarity, nameToRarity, Region, nameToRegion, generateDBStage } from '../../model/blhx/Warships';
 
 class WarshipAbility {
     name: string;
@@ -89,7 +89,22 @@ export async function getWarshipInfo(browser: Browser, name: string) {
                 else if (text === '仅限打捞') {
 
                 } else {
-                    
+                    let regNormal = /([0-9]+)\-([0-9])/;
+                    let regSpecial = /(*)([A-Z]+[0-9])/;
+                    if (regNormal.test(text)) {
+                        let regArr = regNormal.exec(text);
+                        let strNormalMain = parseInt(regArr[1]);
+                        let strNormalSub = parseInt(regArr[2]);
+                        warship.normalsalvage.push(generateDBStage(strNormalMain, strNormalSub));
+                    }
+                    if (regSpecial.test(text)) {
+                        let regArr = regNormal.exec(text);
+                        let strSpecial = regArr[1];
+                        let strSpecialSub = regArr[2];
+                        let isremake = strSpecial.substr(0, 2) === '复刻' ? 1 : 0;
+                        let stageName = strSpecial.substr(2);
+                        // warship.specialsalvage.push(generateDBStage())
+                    }
                 }
             })
         }
