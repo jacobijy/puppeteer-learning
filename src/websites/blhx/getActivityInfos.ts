@@ -3,13 +3,11 @@ import * as fs from 'fs';
 
 const mainPage = 'http://wiki.joyme.com/blhx/%E9%A6%96%E9%A1%B5';
 
-interface ActivityInfo {
+export interface ActivityInfo {
     url: string;
     name: string;
     id: number;
 }
-
-
 
 export default async function getAcitivityInfo(browser: Browser) {
     let page = await browser.newPage();

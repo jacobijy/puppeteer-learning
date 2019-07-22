@@ -1,4 +1,4 @@
-import { getUrl } from './commonFunc';
+import { getUrl, getMissionId } from './commonFunc';
 import { Browser } from 'puppeteer';
 import { WarshipType, nameToWarshipType, Rarity, nameToRarity, Region, nameToRegion, generateDBStage } from '../../model/blhx/Warships';
 
@@ -81,7 +81,7 @@ export async function getWarshipInfo(browser: Browser, name: string) {
             warship.normalsalvage = [];
         }
         else {
-            atags.forEach(a => {
+            atags.forEach(async a => {
                 let text = a.textContent;
                 if (text === '限时建造') {
 
@@ -102,11 +102,18 @@ export async function getWarshipInfo(browser: Browser, name: string) {
                         let strSpecial = regArr[1];
                         let strSpecialSub = regArr[2];
                         let isremake = strSpecial.substr(0, 2) === '复刻' ? 1 : 0;
-                        let stageName = strSpecial.substr(2);
+                        let stageName = strSpecial;
                         // warship.specialsalvage.push(generateDBStage())
+                        let missionId = await getMissionId(strSpecial);
+                        warship.specialsalvage.push(generateDBStage(missionId, parseInt(strSpecialSub[1]), parseInt(strSpecialSub[1], 16) - 9, isremake));
                     }
                 }
             })
         }
+
+        // 性能数据
+        let trsPerformance = divjntj.querySelectorAll('table.wikitable.sv-performance>tbody>tr');
+        let armorType = trsPerformance[3].children[3].textContent;
+        
     })
 }
