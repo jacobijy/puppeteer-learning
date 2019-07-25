@@ -1,4 +1,4 @@
-import  {Sequelize} from 'sequelize';
+import  {Sequelize, DataTypes} from 'sequelize';
 import './Warships';
 
 const blhxDB = new Sequelize('blhx', 'blhx', '198925', {

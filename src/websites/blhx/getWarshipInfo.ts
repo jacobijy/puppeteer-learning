@@ -1,6 +1,6 @@
 import { getUrl, getMissionId } from './commonFunc';
 import { Browser } from 'puppeteer';
-import { WarshipType, nameToWarshipType, Rarity, nameToRarity, Region, nameToRegion, generateDBStage } from '../../model/blhx/Warships';
+import Warship, { WarshipType, nameToWarshipType, Rarity, nameToRarity, Region, nameToRegion, generateDBStage } from '../../model/blhx/Warships';
 
 class WarshipAbility {
     name: string;
@@ -114,6 +114,6 @@ export async function getWarshipInfo(browser: Browser, name: string) {
         // 性能数据
         let trsPerformance = divjntj.querySelectorAll('table.wikitable.sv-performance>tbody>tr');
         let armorType = trsPerformance[3].children[3].textContent;
-        
+        // Warship.
     })
 }
