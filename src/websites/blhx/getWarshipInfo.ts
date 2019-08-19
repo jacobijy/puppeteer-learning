@@ -112,8 +112,41 @@ export async function getWarshipInfo(browser: Browser, name: string) {
         }
 
         // 性能数据
-        let trsPerformance = divjntj.querySelectorAll('table.wikitable.sv-performance>tbody>tr');
-        let armorType = trsPerformance[3].children[3].textContent;
-        
+        function getPerformanceInfo(tr: HTMLTableRowElement, result: {[key: string]: any}) {
+            let tds = tr.children;
+            // tds.item.
+            let index = 0;
+            let key = '';
+            let value: any;
+            for (let td of tds) {
+                if (td.textContent.replace(/\s/g, '') === '') {
+                    continue;
+                }
+                if (index % 2 === 0) {
+                    key = td.textContent.replace(/\s/g, '');
+                }
+                else {
+                    let reg = /([0-9]+)→([0-9]+)/;
+                    let text = td.textContent.replace(/\s/g, '');
+                    if (reg.test(text)) {
+                        value = parseInt(reg.exec(text)[2]);
+                    }
+                    else if (isNaN(parseInt(text))) {
+                        value = text;
+                    }
+                    else {
+                        value = parseInt(text);
+                    }
+                    Object.assign(result, {[key]: value});
+                }
+                index++;
+            }
+        }
+        let trsPerformance = divjntj.querySelectorAll<HTMLTableRowElement>('table.wikitable.sv-performance>tbody>tr');
+        const info = {};
+        for (let i = 3; i <= 8; i++) {
+            let tr = trsPerformance[i];
+            getPerformanceInfo(tr, info);
+        }
     })
 }
