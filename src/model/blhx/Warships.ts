@@ -1,5 +1,5 @@
-import { NUMBER, STRING, ENUM, ARRAY } from 'sequelize';
-// import blhxDB from '.';
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '.';
 /**
   DD = Destroyer = 驱逐舰
 
@@ -128,26 +128,36 @@ export function regionToName(reg: Region): string {
     return Object.keys(regions).find(name => regions[name] === reg);
 }
 
+export default class Warship extends Model {
+}
 
-// const Warship = blhxDB.define('warship', {
-//     shipNo: NUMBER,
-//     shipname: STRING,
-//     aliasname: STRING,
-//     type: ENUM,
-//     armorType: NUMBER,
-//     cannon: NUMBER,
-//     torpedo: NUMBER,
-//     reload: NUMBER,
-//     antiaircraft: NUMBER,
-//     oilwear: NUMBER,
-//     maneuverability: NUMBER,
-//     antisubmarine: NUMBER,
-//     stamina: NUMBER,
-//     ability: ARRAY
-// })
+Warship.init({
+    shipNo: DataTypes.NUMBER,
+    shipname: DataTypes.STRING,
+    shipclass: DataTypes.STRING,
+    aliasname: DataTypes.STRING,
+    englishname: DataTypes.STRING,
+    rarity: DataTypes.ENUM,
+    region: DataTypes.ENUM,
+    iconsrc: DataTypes.STRING,
+    type: DataTypes.ENUM,
+    normalsalvage: DataTypes.ARRAY(DataTypes.NUMBER),
+    specialsalvage: DataTypes.ARRAY(DataTypes.NUMBER),
+    buildtime: DataTypes.NUMBER,
+    armorType: DataTypes.NUMBER,
+    cannon: DataTypes.NUMBER,
+    torpedo: DataTypes.NUMBER,
+    reload: DataTypes.NUMBER,
+    antiaircraft: DataTypes.NUMBER,
+    oilwear: DataTypes.NUMBER,
+    maneuverability: DataTypes.NUMBER,
+    antisubmarine: DataTypes.NUMBER,
+    stamina: DataTypes.NUMBER,
+    ability: DataTypes.ARRAY(DataTypes.JSON)
+}, { sequelize })
 
 // export default Warship;
-// Warship.sync()
+Warship.sync();
 
 
 // 关卡定义
