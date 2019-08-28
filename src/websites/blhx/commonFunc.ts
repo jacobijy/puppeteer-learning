@@ -5,7 +5,8 @@ const baseUrl = Object.freeze('http://wiki.joyme.com/blhx');
 
 const pages = {
     main: '首页',
-    picture: '碧蓝影画'
+    picture: '碧蓝影画',
+    illustrated: '舰娘图鉴'
 }
 
 function getUrl(page: string): string {

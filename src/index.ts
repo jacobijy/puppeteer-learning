@@ -5,6 +5,7 @@ import { getLoadingImg } from './websites/blhx/getImages'
 import './mysql';
 import getAcitivityInfo from './websites/blhx/getActivityInfos';
 import { getWarshipInfo } from './websites/blhx/getWarshipInfo';
+import { getAllWarshipNames } from './websites/blhx/getAllWarshipNames';
 
 // String.prototype.
 process.setMaxListeners(50);
@@ -95,7 +96,8 @@ async function main() {
         // 打开开发者工具, 当此值为true时, headless总为false
         devtools: false,
         // 关闭headless模式, 不会打开浏览器
-        headless: platform === 'linux',
+        // headless: platform === 'linux',
+        headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
         defaultViewport: {
             width: 1200,
@@ -108,7 +110,20 @@ async function main() {
             await getAcitivityInfo(browser);
             break;
         case 'warships':
-            await getWarshipInfo(browser, '');
+            let json = await getAllWarshipNames(browser);
+            for (const type in json) {
+                const ships = json[type];
+                for (const ship of ships) {
+                    try {
+                        await getWarshipInfo(browser, ship);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+            }
+
+            // await getWarshipInfo(browser, '拉菲');
+            // console.log(await getAllWarshipNames(browser));
             break;
         case 'bg':
             await getLoadingImg(browser);
