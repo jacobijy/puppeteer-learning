@@ -16,7 +16,7 @@
     "chalk": "^2.4.2",
     "ioredis": "^4.14.0",
     "lodash": "^4.17.15",
-    "log4js": "^3.0.6",
+    "log4js": "^6.4.0",
     "mysql2": "^1.6.5",
     "puppeteer": "^1.19.0",
     "reflect-metadata": "^0.1.13",
